@@ -1,0 +1,153 @@
+<div class="pop-up-container" cdkDrag cdkDragRootElement=".cdk-overlay-pane" >
+    <div class="pop-up-header-container" cdkDragHandle>
+      <div class="pop-up-header-left-bar"></div>
+      <div class="pop-up-header-content">{{attendanceData==null?'New':'View / Update'}} Attendance</div>
+    </div>
+    <form class="pop-up-content-container" [formGroup]="attendanceForm">
+      <table class="pop-up-content-table">
+        <tr>
+          <td>
+            <mat-form-field>
+              <mat-label>Date</mat-label>
+              <input matInput [matDatepicker]="picker1" formControlName="date">
+              <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+              <mat-datepicker #picker1></mat-datepicker>
+            </mat-form-field>
+          </td>
+          <td>
+            <mat-form-field class="pop-up-field-full-width">
+              <mat-label>Employee<span style="color: red;">*</span></mat-label>
+              <mat-select [disableOptionCentering]="true" #ddlEmployee placeholder="Employee"
+                formControlName="employeeId">
+                <mat-select-filter *ngIf="ddlEmployee.focused" [displayMember]="'name'" [array]="employees"
+                  (filteredReturn)="filteredEmployees =$event"></mat-select-filter>
+                <mat-option *ngFor="let item of filteredEmployees" [value]="item.id">
+                  {{item.name}}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="attendanceForm.get('employeeId').hasError('required')">
+                Employee is Required!
+              </mat-error>
+            </mat-form-field>
+          </td>
+          <td>
+            <mat-form-field class="pop-up-field-full-width">
+              <mat-label>Customer<span style="color: red;">*</span></mat-label>
+              <mat-select [disableOptionCentering]="true" #ddlCustomer placeholder="Customer" formControlName="customerId"
+                (selectionChange)="fnSetDefaultNextDayCustomer()">
+                <mat-select-filter *ngIf="ddlCustomer.focused" [displayMember]="'name'" [array]="customers"
+                  (filteredReturn)="filteredCustomers =$event"></mat-select-filter>
+                <mat-option *ngFor="let item of filteredCustomers" [value]="item.id">
+                  {{item.name}}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="attendanceForm.get('customerId').hasError('required')">
+                Customer is Required!
+              </mat-error>
+            </mat-form-field>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <mat-form-field class="pop-up-field-full-width">
+              <mat-label>Attendance<span style="color: red;">*</span></mat-label>
+              <mat-select formControlName="attendanceStatus">
+                <mat-option [value]="true">YES</mat-option>
+                <mat-option [value]="false">NO</mat-option>
+              </mat-select>
+              <mat-error *ngIf="attendanceForm.get('attendanceStatus').hasError('required')">
+                Attendance is Required!
+              </mat-error>
+            </mat-form-field>
+          </td>
+          <td>
+            <mat-form-field class="pop-up-field-full-width">
+              <mat-label>Next Day Customer<span style="color: red;">*</span></mat-label>
+              <mat-select [disableOptionCentering]="true" #ddlNxtDyCustomer placeholder="Select Next Day Customer"
+                formControlName="nextDayCustomerId">
+                <mat-select-filter *ngIf="ddlNxtDyCustomer.focused" [displayMember]="'name'" [array]="nxnDayCustomers"
+                  (filteredReturn)="filteredNxnDayCustomers =$event"></mat-select-filter>
+                <mat-option *ngFor="let item of filteredNxnDayCustomers" [value]="item.id">
+                  {{item.name}}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="attendanceForm.get('nextDayCustomerId').hasError('required')">
+                Next Day Customer is Required!
+              </mat-error>
+            </mat-form-field>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="3">
+            <mat-form-field class="amt-field">
+              <mat-label>Customer Pay<span style="color: red;">*</span></mat-label>
+              <span matPrefix><i class="fas fa-rupee-sign"></i> &nbsp;</span>
+              <input OnlyNumber autocomplete="off" matInput #customerPay maxlength="4"
+                formControlName="customerPay" (keyup)="fnSetTotalCustomerPayment()">
+              <mat-hint align="end">{{customerPay.value.length}} / 4</mat-hint>
+              <mat-error *ngIf="attendanceForm.get('customerPay').hasError('required')">
+                Customer Pay is Required!
+              </mat-error>
+            </mat-form-field>
+  
+            <mat-form-field class="amt-field">
+              <mat-label>Rent</mat-label>
+              <span matPrefix><i class="fas fa-rupee-sign"></i> &nbsp;</span>
+              <input OnlyNumber autocomplete="off" matInput #rent maxlength="4" formControlName="rent" (keyup)="fnSetTotalCustomerPayment()">
+              <mat-hint align="end">{{rent.value.length}} / 4</mat-hint>
+            </mat-form-field>
+  
+            <mat-form-field class="amt-field">
+              <mat-label>Customer TA</mat-label>
+              <span matPrefix><i class="fas fa-rupee-sign"></i> &nbsp;</span>
+              <input OnlyNumber autocomplete="off" matInput #customerTA maxlength="4" formControlName="customerTA" (keyup)="fnSetTotalCustomerPayment()">
+              <mat-hint align="end">{{customerTA.value.length}} / 4</mat-hint>
+            </mat-form-field>
+  
+            <mat-form-field class="amt-field">
+              <mat-label>Total Cus Pay</mat-label>
+              <span matPrefix><i class="fas fa-rupee-sign"></i> &nbsp;</span>
+              <input OnlyNumber autocomplete="off" matInput #totalCustomerPay maxlength="4"
+                formControlName="totalCustomerPay">
+              <mat-hint align="end">{{totalCustomerPay.value.length}} / 4</mat-hint>
+            </mat-form-field>
+  
+            <mat-form-field class="amt-field">
+              <mat-label>Company TA</mat-label>
+              <span matPrefix><i class="fas fa-rupee-sign"></i> &nbsp;</span>
+              <input OnlyNumber autocomplete="off" matInput #companyTA maxlength="4" formControlName="companyTA">
+              <mat-hint align="end">{{companyTA.value.length}} / 4</mat-hint>
+            </mat-form-field>
+  
+            <mat-form-field class="amt-field">
+              <mat-label>Employee Pay<span style="color: red;">*</span></mat-label>
+              <span matPrefix><i class="fas fa-rupee-sign"></i> &nbsp;</span>
+              <input OnlyNumber autocomplete="off" matInput #employeePay maxlength="4"
+                formControlName="employeePay">
+              <mat-hint align="end">{{employeePay.value.length}} / 4</mat-hint>
+              <mat-error *ngIf="attendanceForm.get('employeePay').hasError('required')">
+                Employee Payment Pay is Required!
+              </mat-error>
+            </mat-form-field>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="3">
+            <mat-form-field class="pop-up-field-full-width">
+              <mat-label>Remarks</mat-label>
+              <textarea matInput rows="4" #description maxlength="500" placeholder="Remarks"
+                formControlName="remarks"></textarea>
+              <mat-hint align="end">{{description.value.length}} / 500</mat-hint>            
+            </mat-form-field>
+          </td>
+        </tr>
+      </table>
+    </form>
+  
+    <div class="pop-up-footer-container">
+      <button mat-flat-button color="primary" class="float-right" mat-button
+        (click)="addOrUpdate()">{{attendanceData==null?'Add':'Update'}}</button>
+      <button mat-flat-button class="float-right pop-up-btn-cancel" mat-button (click)="close()">Cancel</button>
+    </div>
+  </div>
+  

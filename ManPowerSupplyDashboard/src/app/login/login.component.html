@@ -1,0 +1,35 @@
+<div class="login-background">
+    <div class="blur">
+      <mat-card class="login-card">
+        <div class="header-container">
+          <div class="header-image-avatar">
+            <div class="header-image"></div>
+          </div>
+        </div>
+        <form [formGroup]="loginForm" class="login-content">
+          <mat-form-field class="field-full-width">
+            <mat-label class="label">Username</mat-label>
+            <input matInput #userName maxlength="50" placeholder="Username" formControlName="userName" autocomplete="off">
+            <mat-hint align="end">{{userName.value.length}} / 50</mat-hint>
+            <mat-error *ngIf="loginForm.get('userName').hasError('required')">
+              Username is Required!
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field class="field-full-width">
+            <mat-label class="label">Password</mat-label>
+            <input type="password" matInput #password maxlength="50" placeholder="password" formControlName="password" autocomplete="off">
+            <mat-error *ngIf="loginForm.get('password').hasError('required')">
+              Password is Required!
+            </mat-error>
+          </mat-form-field>
+        </form>
+        <div class="footer-container">
+  
+          <button mat-flat-button color="primary" class="btn-login" mat-button (click)="Login()">
+            <div class="btn-login-icon"><i class="fas fa-sign-in-alt"></i></div> Login
+          </button>
+        </div>
+      </mat-card>
+    </div>
+  </div>
+  

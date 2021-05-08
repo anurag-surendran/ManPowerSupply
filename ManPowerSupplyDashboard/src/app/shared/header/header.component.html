@@ -1,0 +1,21 @@
+<div class="header">
+  <button mat-icon-button class="menu-button" (click)="toggleSideBar()">
+    <i class="fas fa-bars"></i>
+  </button>
+  <div class="page-name-container">
+    <div class="router-data">Man Power Supply</div>
+    <div class="router-data" *ngFor="let item of routeDatas">
+      <div class="separator">/</div>{{item}}
+    </div>
+  </div>
+  <div class="user-container" [matMenuTriggerFor]="beforeMenu">
+    {{user.firstName[0].toUpperCase()}} {{user.lastName.length > 0 ? user.lastName[0].toUpperCase() : ''}}
+  </div>
+  <mat-menu #beforeMenu="matMenu" xPosition="before">
+    <div class="user-name">{{user.firstName}} {{user.lastName}}</div>
+    <button mat-menu-item (click)="profile();"><i class="fas fa-user menu-icon"></i>Profile</button>
+    <button *ngIf="isSuperAdmin()" mat-menu-item (click)="addUser();"><i class="fas fa-user-plus menu-icon"></i>Add User</button>
+    <button mat-menu-item (click)="updatePassword();"><i class="fas fa-eye-slash menu-icon"></i>Update Password</button>
+    <button mat-menu-item (click)="logout();"><i class="fas fa-sign-out-alt menu-icon"></i>Logout</button>
+  </mat-menu>
+</div>

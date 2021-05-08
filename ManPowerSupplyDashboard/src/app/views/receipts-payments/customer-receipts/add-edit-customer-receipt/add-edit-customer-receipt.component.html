@@ -1,0 +1,97 @@
+<div class="pop-up-container" cdkDrag cdkDragRootElement=".cdk-overlay-pane">
+    <div class="pop-up-header-container" cdkDragHandle>
+      <div class="pop-up-header-left-bar"></div>
+      <div class="pop-up-header-content">{{customerReceiptData==null?'New':'View / Update'}} Customer Receipt</div>
+    </div>
+    <form class="pop-up-content-container" [formGroup]="customerReceiptForm">
+      <table class="pop-up-content-table">
+        <tr>
+          <td>
+            <mat-form-field>
+              <mat-label>Date<span style="color: red;">*</span></mat-label>
+              <input matInput [matDatepicker]="picker1" formControlName="date">
+              <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+              <mat-datepicker #picker1></mat-datepicker>
+              <mat-error *ngIf="customerReceiptForm.get('date').hasError('required')">
+                Date is Required!
+              </mat-error>
+            </mat-form-field>
+          </td>
+          <td>
+            <mat-form-field class="pop-up-field-full-width">
+              <mat-label>Customer<span style="color: red;">*</span></mat-label>
+              <mat-select [disableOptionCentering]="true" #ddlCustomer placeholder="Customer" formControlName="customerId"
+                (selectionChange)="fnChangeCustomerDDL()">
+                <mat-select-filter *ngIf="ddlCustomer.focused" [displayMember]="'name'" [array]="customers"
+                  (filteredReturn)="filteredCustomers =$event"></mat-select-filter>
+                <mat-option *ngFor="let item of filteredCustomers" [value]="item.id">
+                  {{item.name}}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="customerReceiptForm.get('customerId').hasError('required')">
+                Customer is Required!
+              </mat-error>
+            </mat-form-field>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <div class="bal-amt"><i *ngIf="balanceAmount!=null"
+                class="fas fa-rupee-sign"></i>&nbsp;{{balanceAmount==null?'N/A':balanceAmount}}
+            </div>
+          </td>
+          <td>
+            <mat-form-field class="pop-up-field-full-width">
+              <mat-label>Paid Amount<span style="color: red;">*</span></mat-label>
+              <span matPrefix><i class="fas fa-rupee-sign"></i> &nbsp;</span>
+              <input OnlyNumber matInput #paidAmount maxlength="10" formControlName="paidAmount" autocomplete="off">
+              <mat-hint align="end">{{paidAmount.value.length}} / 10</mat-hint>
+              <mat-error *ngIf="customerReceiptForm.get('paidAmount').hasError('required')">
+                Paid Amount is Required!
+              </mat-error>
+            </mat-form-field>
+          </td>
+        </tr>
+        <tr>
+          <td>
+              <mat-form-field class="pop-up-field-full-width">
+                  <mat-label>Cash Collected By    <span style="color: red;">*</span></mat-label>
+                  <input type="text"
+                         placeholder="Cash Collected By"
+                         aria-label="Number"
+                         matInput
+                         formControlName="cashCollectedBy"
+                         [matAutocomplete]="auto"
+                         #collectedBy>
+                  <mat-autocomplete #auto="matAutocomplete">
+                    <mat-option *ngFor="let option of filteredCashCollectedPersons | async" [value]="option">
+                      {{option}}
+                    </mat-option>
+                  </mat-autocomplete>
+                  <mat-hint align="end">{{collectedBy.value.length}} / 50</mat-hint>
+                  <mat-error *ngIf="customerReceiptForm.get('cashCollectedBy').hasError('required')">
+                      Cash Collected By is Required!
+                    </mat-error>
+                </mat-form-field>
+          </td>
+          <td>
+            <mat-form-field class="pop-up-field-full-width">
+              <mat-label>Remarks</mat-label>
+              <input matInput #remarks maxlength="100" formControlName="remarks" autocomplete="off">
+              <mat-hint align="end">{{remarks.value.length}} / 100</mat-hint>
+              <mat-error *ngIf="customerReceiptForm.get('remarks').hasError('required')">
+                Remarks is Required!
+              </mat-error>
+            </mat-form-field>
+          </td>
+        </tr>
+      </table>
+    </form>
+  
+    <div class="pop-up-footer-container">
+      <button mat-flat-button color="primary" class="float-right" mat-button
+        (click)="addOrUpdate()">{{customerReceiptData==null?'Add':'Update'}}</button>
+      <button mat-flat-button class="float-right pop-up-btn-cancel" mat-button (click)="close()">Cancel</button>
+    </div>
+  </div>
+  

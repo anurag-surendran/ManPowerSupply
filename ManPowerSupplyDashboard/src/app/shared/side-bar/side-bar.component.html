@@ -1,0 +1,64 @@
+<div class="menu-item" routerLinkActive="active-item" routerLink="/dashboard">
+  Dashboard
+</div>
+
+<mat-divider></mat-divider>
+
+<mat-expansion-panel [expanded]="currentExpanded == 'Master'" (opened)="setExpanded('Master')" class="expand-panel">
+  <mat-expansion-panel-header class="header" [collapsedHeight]="customCollapsedHeight"
+    [expandedHeight]="customExpandedHeight">
+    Master
+  </mat-expansion-panel-header>
+  <a class="menu-item-sub1" routerLinkActive="active-item" routerLink="/master/customer">
+    Customer
+  </a>
+  <a class="menu-item-sub1" routerLinkActive="active-item" routerLink="/master/skill">
+    Skill
+  </a>
+  <a class="menu-item-sub1" routerLinkActive="active-item" routerLink="/master/employee">
+    Employee
+  </a>
+  <a class="menu-item-sub1" routerLinkActive="active-item" routerLink="/master/attendance">
+    Attendance
+  </a>
+</mat-expansion-panel>
+
+<mat-divider></mat-divider>
+
+<mat-expansion-panel [expanded]="currentExpanded == 'ReceiptsPayments'" (opened)="setExpanded('ReceiptsPayments')"
+  class="expand-panel">
+  <mat-expansion-panel-header class="header" [collapsedHeight]="customCollapsedHeight"
+    [expandedHeight]="customExpandedHeight">
+    Receipts & Payments
+  </mat-expansion-panel-header>
+  <a class="menu-item-sub1" routerLinkActive="active-item" routerLink="/receipt-payment/customer">
+    Customer Receipts
+  </a>
+  <a class="menu-item-sub1" routerLinkActive="active-item" routerLink="/receipt-payment/employee">
+    Employee Payments
+  </a>
+  <a class="menu-item-sub1" routerLinkActive="active-item" routerLink="/receipt-payment/receipt">
+    Other Receipts
+  </a>
+  <a class="menu-item-sub1" routerLinkActive="active-item" routerLink="/receipt-payment/payment">
+    Other Payments
+  </a>
+</mat-expansion-panel>
+
+<mat-divider></mat-divider>
+
+<mat-expansion-panel [expanded]="currentExpanded == 'Reports'" (opened)="setExpanded('Reports')" class="expand-panel">
+  <mat-expansion-panel-header class="header" [collapsedHeight]="customCollapsedHeight"
+    [expandedHeight]="customExpandedHeight">
+    Reports
+  </mat-expansion-panel-header>
+  <a class="menu-item-sub1" routerLinkActive="active-item" routerLink="/reports/customer">
+    Customer Ledger
+  </a>
+  <a class="menu-item-sub1" routerLinkActive="active-item" routerLink="/reports/employee">
+    Employee Ledger
+  </a>
+  <a class="menu-item-sub1" routerLinkActive="active-item" routerLink="/reports/income-expenditure">
+    Income And Expenditure
+  </a>
+</mat-expansion-panel>

@@ -1,0 +1,39 @@
+:host {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+  
+  mat-drawer {
+    width: 275px;
+    background-color: white;
+    color: black;
+  }
+  
+  mat-drawer-container {
+    height: 100%;
+    background-color: white;
+    color: black;
+  }
+  
+  mat-drawer-content {
+    height: 100%;
+  }
+  
+  .app-side-bar {
+      background-color: #eaeaea;
+  }
+  
+  .settigns-overlay {
+    background-color: #dedede2b;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    z-index: 1;
+    margin: 0 auto;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+  }
+  

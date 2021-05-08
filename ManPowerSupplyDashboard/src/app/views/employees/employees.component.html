@@ -1,0 +1,100 @@
+<div class="applications-container">
+  <spinner *ngIf="employees==null"></spinner>
+  <div class="top-panel">
+    <div class="search-container">
+      <mat-form-field class="pop-up-field-full-width">
+        <span matPrefix><i class="fas fa-search"></i> &nbsp;</span>
+        <input cdkFocusInitial placeholder="Search" [(ngModel)]="searchText" matInput
+          [ngModelOptions]="{standalone: true}" autocomplete="off">
+        <span *ngIf="employees!=null" matSuffix>Total Items : {{filterMetadata.count}}</span>
+      </mat-form-field>
+    </div>
+    <div class="add-container" (click)="addOrUpdateEmployee()">
+      <div class="add-icon"><i class="fas fa-plus"></i></div>
+      <div class="add-application-label">New Employee</div>
+    </div>
+    <div class="print-icon" (click)="print();" ><i class="fas fa-print"></i></div>
+  </div>
+  <div class="content-panel">
+    <div class="table-container">
+      <div class="table-scroll">
+        <table class="main-table">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Employee Name</th>
+              <th scope="col"></th>
+              <th scope="col">Mobile</th>
+              <th scope="col">Alternate Mobile</th>
+              <th scope="col">Balance Amount</th>
+              <th scope="col">Skills</th>
+              <th scope="col">Location</th>
+              <th scope="col">Last Updated On</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              *ngFor="let item of employees | TableFilter:{name:searchText,mobile:searchText,location:searchText,skillsAsPlainText:searchText}:filterMetadata:['balanceAmount']; index as i "
+              (mouseover)="highlightRow(item.id)" class="tr">
+              <td>{{i+1}}</td>
+              <td><span class="table-col-title-hlink" (click)="addOrUpdateEmployee(item)"
+                  [ngClass]="{'title-col-highlight' : item.id == selectedRow}">{{item.name}}</span></td>
+              <td>
+                <button style="float: right;" class="btn-more" mat-icon-button [matMenuTriggerFor]="menu"
+                  aria-label="Example icon-button with a menu">
+                  <mat-icon>more_vert</mat-icon>
+                </button>
+                <mat-menu #menu="matMenu">
+                  <button mat-menu-item (click)="addOrUpdateEmployee(item)">
+                    <i class="far fa-edit active-icon td-active-result"></i>
+                    <span>Edit</span>
+                  </button>
+                  <button *ngIf="!item.isDeleted" mat-menu-item (click)="fnEmployeePayment(item)">
+                    <i class="fas fa-money-check card-icon td-active-result"></i>
+                    <span>Add Employee Payment</span>
+                  </button>
+                  <button *ngIf="!item.isDeleted" mat-menu-item (click)="fnViewPaymentTransactions(item)">
+                    <i class="fas fa-book-reader card-icon td-active-result"></i>
+                    <span>View Payment Transactions</span>
+                  </button>
+                  <button *ngIf="!item.isDeleted" mat-menu-item (click)="fnViewEmployeeLedger(item)">
+                    <i class="fas fa-book card-icon td-active-result"></i>
+                    <span>View Employee Ledger</span>
+                  </button>
+                </mat-menu>
+              </td>
+              <td>{{item.mobile}}</td>
+              <td>{{item.alternateMobile}}</td>
+              <td><i class="fas fa-rupee-sign"></i>&nbsp;{{item.balanceAmount}}</td>
+              <td>
+                <!-- <mat-chip-list cdkDropList cdkDropListOrientation="horizontal">
+                    <mat-chip color="primary" selected [title]="skill.name" *ngFor="let skill of item.skills">
+                      {{skill.code}}
+                    </mat-chip>
+                  </mat-chip-list> -->
+                <div class="emp-code-chip" [title]="skill.name" *ngFor="let skill of item.skills">
+                  {{skill.code}}
+                </div>
+              </td>
+              <td>{{item.location}}</td>
+              <td>{{item.lastUpdatedDate | date : 'dd-MM-yyyy HH:mm:ss'}}</td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr>
+              <th scope="col"></th>
+              <th scope="col"></th>
+              <th scope="col"></th>
+              <th scope="col"></th>
+              <th scope="col">Total</th>
+              <th scope="col"><i class="fas fa-rupee-sign"></i>&nbsp;{{filterMetadata.sums[0]}}</th>
+              <th scope="col"></th>
+              <th scope="col"></th>
+              <th scope="col"></th>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

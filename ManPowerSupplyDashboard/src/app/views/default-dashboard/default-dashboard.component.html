@@ -1,0 +1,30 @@
+<mat-card class="dash-row">
+    <mat-grid-list cols="4" rowHeight="40px">
+        <mat-grid-tile colspan="3" rowspan="1">
+            <div class="welcome-message">Welcome back <span class="user-name">{{user.firstName}}
+                    {{user.lastName}}!</span></div>
+        </mat-grid-tile>
+        <mat-grid-tile colspan="1" rowspan="4">
+            <img style="height: 100%; width: 100%;" src="../../../assets/images/dashboard-container.svg" />
+        </mat-grid-tile>
+        <mat-grid-tile colspan="1" rowspan="3">
+            <app-count-card [cardData]="customerBalanceCardModel"></app-count-card>
+        </mat-grid-tile>
+        <mat-grid-tile colspan="1" rowspan="3">
+            <app-count-card [cardData]="employeeBalanceCardModel"></app-count-card>
+        </mat-grid-tile>
+        <mat-grid-tile colspan="1" rowspan="3">
+            <app-count-card [cardData]="currentBalanceCardModel"></app-count-card>
+        </mat-grid-tile>
+    </mat-grid-list>
+</mat-card>
+<!-- <app-attendance-card *ngIf="attendances!=null" (toggleEvent)="attendanceToggle($event)" [attendances]="attendances"
+    [isCurrentMonth]="isCurrentMonthAttendance"></app-attendance-card> -->
+<div class="attendance-card">
+    <app-attendance-card></app-attendance-card>
+</div>
+<mat-card>
+    <div class="customer-card">
+        <app-customer-card></app-customer-card>
+    </div>
+</mat-card>

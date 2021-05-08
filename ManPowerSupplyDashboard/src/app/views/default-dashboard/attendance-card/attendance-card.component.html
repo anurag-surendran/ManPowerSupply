@@ -1,0 +1,25 @@
+<div class="container">  
+  <spinner *ngIf="attendances==null"></spinner>
+    <div class="header">
+        <div class="header-icon"><i class="fas fa-clipboard-list"></i></div>
+        <div class="header-text">Attendance Overview</div>
+        <div class="toggle">
+            <mat-slide-toggle 
+            [checked]="isCurrentMonth"
+            color="primary"
+            (change)="toggle($event)"
+            >{{!isCurrentMonth?'Cuurent Month':'Last 30 Days'}}</mat-slide-toggle>
+        </div>
+    </div>
+    <div *ngIf="loaded" style="display: block;">
+        <canvas baseChart style="height: 500px;"
+          [datasets]="barChartData"
+          [labels]="barChartLabels"
+          [options]="barChartOptions"
+          [plugins]="barChartPlugins"
+          [legend]="barChartLegend"
+          [chartType]="barChartType">
+        </canvas>
+      </div>
+</div>
+

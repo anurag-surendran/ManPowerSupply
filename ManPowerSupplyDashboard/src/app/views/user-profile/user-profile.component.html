@@ -1,0 +1,80 @@
+<div class="pop-up-container" cdkDrag cdkDragRootElement=".cdk-overlay-pane" >
+    <div class="pop-up-header-container" cdkDragHandle>
+        <div class="pop-up-header-left-bar"></div>
+        <div class="pop-up-header-content">{{userModel.firstName}} {{userModel.lastName}}'s Profile</div>
+    </div>
+    <form class="pop-up-content-container" [formGroup]="profileForm">
+        <table class="pop-up-content-table pop-up-padding">
+            <tr>
+                <td>
+                    <mat-form-field class="pop-up-field-full-width">
+                        <mat-label>User Name<span style="color: red;">*</span></mat-label>
+                        <input matInput formControlName="userName">                        
+                    </mat-form-field>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <mat-form-field class="pop-up-field-full-width">
+                        <mat-label>First Name<span style="color: red;">*</span></mat-label>
+                        <input matInput #firstName maxlength="50" formControlName="firstName" cdkFocusInitial>
+                        <mat-hint align="end">{{firstName.value.length}} / 50</mat-hint>
+                        <mat-error *ngIf="profileForm.get('firstName').hasError('required')">
+                            First Name is Required!
+                        </mat-error>
+                    </mat-form-field>
+                </td>
+                <td>
+                    <mat-form-field class="pop-up-field-full-width">
+                        <mat-label>Last Name<span style="color: red;">*</span></mat-label>
+                        <input matInput #lastName maxlength="50" formControlName="lastName" cdkFocusInitial>
+                        <mat-hint align="end">{{lastName.value.length}} / 50</mat-hint>
+                        <mat-error *ngIf="profileForm.get('lastName').hasError('required')">
+                            Last Name is Required!
+                        </mat-error>
+                    </mat-form-field>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <mat-form-field class="pop-up-field-full-width">
+                        <mat-label>Mobile Number<span style="color: red;">*</span></mat-label>
+                        <span matPrefix>+91 &nbsp;</span>
+                        <input OnlyNumber matInput #mobile maxlength="10" formControlName="mobileNumber">
+                        <mat-hint align="end">{{mobile.value.length}} / 10</mat-hint>
+                        <mat-error *ngIf="profileForm.get('mobileNumber').hasError('required')">
+                            Mobile is Required!
+                        </mat-error>
+                    </mat-form-field>
+                </td>
+                <td>
+                    <mat-form-field class="pop-up-field-full-width">
+                        <mat-label>E Mail<span style="color: red;">*</span></mat-label>
+                        <input matInput #email maxlength="50" formControlName="eMail">
+                        <mat-hint align="end">{{email.value.length}} / 50</mat-hint>
+                        <mat-error *ngIf="profileForm.get('eMail').hasError('required')">
+                            E Mail is Required!
+                        </mat-error>
+                        <mat-error *ngIf="profileForm.get('eMail').hasError('email')">
+                            E mail must be a valid format
+                        </mat-error>
+                    </mat-form-field>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Organization(s)
+                    <ul>
+                        <li *ngFor="let org of userModel.organizations">{{org.name}}</li>
+                    </ul>
+                </td>
+            </tr>
+        </table>
+    </form>
+
+    <div class="pop-up-footer-container">
+        <button mat-flat-button color="primary" class="float-right" mat-button
+            (click)="fnUpdateProfile()">Update</button>
+        <button mat-flat-button class="float-right pop-up-btn-cancel" mat-button (click)="close()">Cancel</button>
+    </div>
+</div>

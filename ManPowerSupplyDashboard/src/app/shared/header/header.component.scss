@@ -1,0 +1,70 @@
+.header {
+    width: 100%;
+    height: 47px;
+    border-bottom: 1px solid lightgrey;
+  }
+  
+  .menu-button {
+    margin-top: 3px;
+    font-size: 20px;
+    color: #0078d4;
+    float: left;
+  }
+  
+  .menu-button :hover {
+    color: #1f97f2;
+  }
+  
+  .page-name-container {
+    float: left;
+    color: rgba(0, 0, 0, 0.55);
+    font-weight: 400;
+    font-family: "Segoe UI VSS (Regular)", "Segoe UI", "-apple-system", BlinkMacSystemFont, Roboto, "Helvetica Neue", Helvetica, Ubuntu, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    height: 47px;
+    line-height: 47px;
+    margin-left: 20px;
+  }
+  
+  .router-data{
+    float: left;
+  }
+  
+  .separator{
+    float: left;
+    width: 25px;
+    text-align: center;
+  }
+
+  .user-container{
+    float: right;
+    background-color: #ddd;
+    height: 35px;
+    line-height: 35px;
+    margin-right: 20px;
+    border-radius: 47px;
+    cursor: pointer;
+    width: 35px;
+    text-align: center;
+    margin-top: 7px;
+    font-weight: 500;
+    font-size: 16px;
+    color: #a055ea;
+  }
+  .user-container:hover{
+    background-color:rgb(194, 194, 194);
+  }
+
+  .user-name{
+    height: 40px;
+    width: 120px;
+    margin-left: 20px;
+    margin-right: 20px;
+    line-height: 40px;
+    font-weight: 100;
+    color: #6d6d6d;
+  }
+
+  .menu-icon{
+    color: #a055ea;
+    margin-right: 20px;
+  }

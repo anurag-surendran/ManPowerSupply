@@ -1,0 +1,88 @@
+<div class="pop-up-container" cdkDrag cdkDragRootElement=".cdk-overlay-pane">
+  <div class="pop-up-header-container" cdkDragHandle>
+    <div class="pop-up-header-left-bar"></div>
+    <div class="pop-up-header-content">{{employeePaymentData==null?'New':'View / Update'}} Employee Payment</div>
+  </div>
+  <form class="pop-up-content-container" [formGroup]="employeePaymentForm">
+    <table class="pop-up-content-table">
+      <tr>
+        <td>
+          <mat-form-field>
+            <mat-label>Date<span style="color: red;">*</span></mat-label>
+            <input matInput [matDatepicker]="picker1" formControlName="date">
+            <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+            <mat-datepicker #picker1></mat-datepicker>
+            <mat-error *ngIf="employeePaymentForm.get('date').hasError('required')">
+              Date is Required!
+            </mat-error>
+          </mat-form-field>
+        </td>
+        <td>
+          <mat-form-field class="pop-up-field-full-width">
+            <mat-label>Employee<span style="color: red;">*</span></mat-label>
+            <mat-select [disableOptionCentering]="true" #ddlEmployee placeholder="Employee" formControlName="employeeId"
+              (selectionChange)="fnChangeEmployeeDDL()">
+              <mat-select-filter *ngIf="ddlEmployee.focused" [displayMember]="'name'" [array]="employees"
+                (filteredReturn)="filteredEmployees =$event"></mat-select-filter>
+              <mat-option *ngFor="let item of filteredEmployees" [value]="item.id">
+                {{item.name}}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="employeePaymentForm.get('employeeId').hasError('required')">
+              Employee is Required!
+            </mat-error>
+          </mat-form-field>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <div class="bal-amt"><i *ngIf="balanceAmount!=null"
+              class="fas fa-rupee-sign"></i>&nbsp;{{balanceAmount==null?'N/A':balanceAmount}}
+          </div>
+        </td>
+        <td>
+          <mat-form-field class="pop-up-field-full-width">
+            <mat-label>Paid Amount<span style="color: red;">*</span></mat-label>
+            <span matPrefix><i class="fas fa-rupee-sign"></i> &nbsp;</span>
+            <input OnlyNumber matInput #amount maxlength="10" formControlName="amount" autocomplete="off">
+            <mat-hint align="end">{{amount.value.length}} / 10</mat-hint>
+            <mat-error *ngIf="employeePaymentForm.get('amount').hasError('required')">
+              Paid Amount is Required!
+            </mat-error>
+          </mat-form-field>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <mat-form-field class="pop-up-field-full-width">
+            <mat-label>Payment Type<span style="color: red;">*</span></mat-label>
+            <mat-select placeholder="Payment Type" formControlName="paymentTypeId">
+              <mat-option><i class="fas fa-undo-alt pop-up-ddl-reset-icon"></i>Clear</mat-option>
+              <mat-option [value]="type.id" *ngFor="let type of paymentTypes">{{ type.name }}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="employeePaymentForm.get('paymentTypeId').hasError('required')">
+              Payment Type is Required!
+            </mat-error>
+          </mat-form-field>
+        </td>
+        <td>
+          <mat-form-field class="pop-up-field-full-width">
+            <mat-label>Remarks</mat-label>
+            <input matInput #remarks maxlength="100" formControlName="remarks" autocomplete="off">
+            <mat-hint align="end">{{remarks.value.length}} / 100</mat-hint>
+            <mat-error *ngIf="employeePaymentForm.get('remarks').hasError('required')">
+              Remarks is Required!
+            </mat-error>
+          </mat-form-field>
+        </td>
+      </tr>
+    </table>
+  </form>
+
+  <div class="pop-up-footer-container">
+    <button mat-flat-button color="primary" class="float-right" mat-button
+      (click)="addOrUpdate()">{{employeePaymentData==null?'Add':'Update'}}</button>
+    <button mat-flat-button class="float-right pop-up-btn-cancel" mat-button (click)="close()">Cancel</button>
+  </div>
+</div>

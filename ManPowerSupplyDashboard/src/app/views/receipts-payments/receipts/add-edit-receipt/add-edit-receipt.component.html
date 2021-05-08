@@ -1,0 +1,87 @@
+<div class="pop-up-container" cdkDrag cdkDragRootElement=".cdk-overlay-pane">
+  <div class="pop-up-header-container" cdkDragHandle>
+    <div class="pop-up-header-left-bar"></div>
+    <div class="pop-up-header-content">{{receiptData==null?'New':'View / Update'}} Receipt</div>
+  </div>
+  <form class="pop-up-content-container" [formGroup]="receiptForm">
+    <table class="pop-up-content-table">
+      <tr>
+        <td>
+          <mat-form-field>
+            <mat-label>Date<span style="color: red;">*</span></mat-label>
+            <input matInput [matDatepicker]="picker1" formControlName="date">
+            <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+            <mat-datepicker #picker1></mat-datepicker>
+            <mat-error *ngIf="receiptForm.get('date').hasError('required')">
+              Date is Required!
+            </mat-error>
+          </mat-form-field>
+        </td>
+        <td>
+          <mat-form-field class="pop-up-field-full-width">
+            <mat-label>Account Head<span style="color: red;">*</span></mat-label>
+            <mat-select [disableOptionCentering]="true" #ddlAccountHeadr placeholder="Account Head"
+              formControlName="accountHeadId">
+              <mat-select-filter *ngIf="ddlAccountHeadr.focused" [displayMember]="'name'" [array]="accountHeads"
+                (filteredReturn)="filteredAccountHeads =$event"></mat-select-filter>
+              <mat-option *ngFor="let item of filteredAccountHeads" [value]="item.id">
+                {{item.name}}
+              </mat-option>
+            </mat-select>
+            <mat-hint align="end">
+              <div (click)="addAccountHead()" class="add-new-hyper-link">New</div>
+            </mat-hint>
+            <mat-error *ngIf="receiptForm.get('accountHeadId').hasError('required')">
+              Account Head is Required!
+              <mat-error align="end">
+                <div (click)="addAccountHead()" class="add-new-hyper-link">New</div>
+              </mat-error>
+            </mat-error>
+          </mat-form-field>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <mat-form-field class="pop-up-field-full-width">
+            <mat-label>Amount<span style="color: red;">*</span></mat-label>
+            <span matPrefix><i class="fas fa-rupee-sign"></i> &nbsp;</span>
+            <input OnlyNumber matInput #amount maxlength="10" formControlName="amount" autocomplete="off">
+            <mat-hint align="end">{{amount.value.length}} / 10</mat-hint>
+            <mat-error *ngIf="receiptForm.get('amount').hasError('required')">
+              Amount is Required!
+            </mat-error>
+          </mat-form-field>
+        </td>
+        <td>
+          <mat-form-field class="pop-up-field-full-width">
+            <mat-label>Particulars<span style="color: red;">*</span></mat-label>
+            <input matInput #particular maxlength="50" formControlName="particular" autocomplete="off">
+            <mat-hint align="end">{{particular.value.length}} / 50</mat-hint>
+            <mat-error *ngIf="receiptForm.get('particular').hasError('required')">
+              Particular is Required!
+            </mat-error>
+          </mat-form-field>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2">
+          <mat-form-field class="pop-up-field-full-width">
+            <mat-label>Description<span style="color: red;">*</span></mat-label>
+            <textarea matInput rows="5" #description maxlength="500" placeholder="Description"
+              formControlName="description"></textarea>
+            <mat-hint align="end">{{description.value.length}} / 500</mat-hint>
+            <mat-error *ngIf="receiptForm.get('description').hasError('required')">
+              Description is Required!
+            </mat-error>
+          </mat-form-field>
+        </td>
+      </tr>
+    </table>
+  </form>
+
+  <div class="pop-up-footer-container">
+    <button mat-flat-button color="primary" class="float-right" mat-button
+      (click)="addOrUpdate()">{{receiptData==null?'Add':'Update'}}</button>
+    <button mat-flat-button class="float-right pop-up-btn-cancel" mat-button (click)="close()">Cancel</button>
+  </div>
+</div>

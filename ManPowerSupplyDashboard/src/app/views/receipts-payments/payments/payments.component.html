@@ -1,0 +1,120 @@
+<div class="applications-container">
+    <spinner *ngIf="receipts==null"></spinner>
+    <div class="top-panel">
+      <form class="pop-up-content-container" [formGroup]="paymentForm">
+        <div class="date-container">
+          <mat-form-field>
+            <mat-label>From Date</mat-label>
+            <input matInput (dateInput)="fnLoadAllPayments()" formControlName="fromDate"
+              [matDatepicker]="picker1">
+            <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+            <mat-datepicker #picker1></mat-datepicker>
+            <mat-error *ngIf="paymentForm.get('fromDate').hasError('required')">
+              From Date is Required!
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="date-container">
+          <mat-form-field>
+            <mat-label>To Date</mat-label>
+            <input matInput (dateInput)="fnLoadAllPayments()" formControlName="toDate" [matDatepicker]="picker2">
+            <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+            <mat-datepicker #picker2></mat-datepicker>
+            <mat-error *ngIf="paymentForm.get('toDate').hasError('required')">
+              To Date is Required!
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="search-container">
+          <mat-form-field class="pop-up-field-full-width">
+            <span matPrefix><i class="fas fa-search"></i> &nbsp;</span>
+            <input cdkFocusInitial placeholder="Search" [(ngModel)]="searchText" matInput
+              [ngModelOptions]="{standalone: true}" autocomplete="off">
+            <span *ngIf="receipts!=null" matSuffix>Total Items : {{filterMetadata.count}}</span>
+          </mat-form-field>
+        </div>
+        <div class="add-container" (click)="addOrUpdateReceipt()">
+          <div class="add-icon"><i class="fas fa-plus"></i></div>
+          <div class="add-application-label">New Payment</div>
+        </div>
+      </form>
+    </div>
+    <div class="content-panel">
+      <div class="table-container">
+        <div class="table-scroll">
+          <form class="pop-up-content-container" [formGroup]="paymentForm">
+            <table class="main-table">
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Date</th>
+                  <th scope="col">
+                    <mat-form-field class="pop-up-field-full-width">
+                      <mat-label>Account Head</mat-label>
+                      <mat-select [disableOptionCentering]="true" #ddlCustomer placeholder="Account Head"
+                        formControlName="accountHeadId" (selectionChange)="fnLoadAllPayments()">
+                        <mat-select-filter *ngIf="ddlCustomer.focused" [displayMember]="'name'" [array]="accountHeads"
+                          (filteredReturn)="filteredAccountHeads =$event"></mat-select-filter>
+                        <mat-option><i class="fas fa-undo-alt pop-up-ddl-reset-icon"></i>Clear</mat-option>
+                        <mat-option *ngFor="let item of filteredAccountHeads" [value]="item.id">
+                          {{item.name}}
+                        </mat-option>
+                      </mat-select>                   
+                    </mat-form-field>
+                  </th>
+                  <th scope="col">Particulars</th>
+                  <th scope="col">Amount</th>
+                  <th scope="col">Remarks</th>
+                  <th scope="col">Updated On</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  *ngFor="let item of receipts.particulars | TableFilter:{date:searchText,particular:searchText,accountHeadName:searchText,amount:searchText}
+                  :filterMetadata : ['amount']; 
+                  index as i;"
+                  (mouseover)="highlightRow(item.id)" class="tr">
+                  <td>{{i+1}}</td>
+                  <td>
+                    <span class="table-col-title-hlink" (click)="addOrUpdateReceipt(item)"
+                      [ngClass]="{'title-col-highlight' : item.id == selectedRow}">{{item.date | date : 'dd-MM-yyyy'}}</span>
+                    <button style="float: right;" class="btn-more" mat-icon-button [matMenuTriggerFor]="menu"
+                      aria-label="Example icon-button with a menu">
+                      <i class="fas fa-ellipsis-v"></i>
+                    </button>
+                    <mat-menu #menu="matMenu">
+                      <button mat-menu-item (click)="addOrUpdateReceipt(item)">
+                        <i class="far fa-edit active-icon td-active-result"></i>
+                        <span>Edit</span>
+                      </button>
+                      <button *ngIf="!item.isDeleted" mat-menu-item (click)="deleteReceipt(item.id)">
+                        <i class="far fa-times-circle non-active-icon td-active-result"></i>
+                        <span>Delete</span>
+                      </button>
+                    </mat-menu>
+                  </td>
+                  <td>{{item.accountHeadName}}</td>
+                  <td>{{item.particular}}</td>
+                  <td><i class="fas fa-rupee-sign"></i>&nbsp;{{item.amount}}</td>
+                  <td>{{item.description}}</td>
+                  <td>{{item.lastUpdatedDate | date : 'dd-MM-yyyy HH:mm:ss'}}</td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th scope="col"></th>
+                  <th scope="col"></th>
+                  <th scope="col">Total</th>
+                  <th scope="col"></th>
+                  <th scope="col">{{filterMetadata.sums[0]}}</th>
+                  <th scope="col"></th>
+                  <th scope="col"></th>
+                </tr>
+              </tfoot>
+            </table>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  

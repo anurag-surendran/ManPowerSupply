@@ -1,0 +1,59 @@
+<div class="container">
+    <spinner *ngIf="customers==null"></spinner>
+    <div class="top-panel">
+        <div class="search-container">
+            <mat-form-field class="pop-up-field-full-width">
+                <span matPrefix><i class="fas fa-search"></i> &nbsp;</span>
+                <input cdkFocusInitial placeholder="Search" [(ngModel)]="searchText" matInput
+                    [ngModelOptions]="{standalone: true}" autocomplete="off">
+                <span *ngIf="customers!=null" matSuffix>Total Items : {{filterMetadata.count}}</span>
+            </mat-form-field>
+        </div>
+        <div class="print-icon" (click)="print();"><i class="fas fa-print"></i></div>
+    </div>
+    <div class="content-panel">
+        <div class="table-container">
+          <div class="table-scroll">
+            <table class="main-table">
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Name</th>
+                  <th scope="col">Mobile</th>
+                  <th scope="col">Address</th>
+                  <th scope="col">Status</th>
+                  <th scope="col">Balance Amount</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  *ngFor="let item of customers | TableFilter:{name:searchText,mobile:searchText}:filterMetadata:['balanceAmount']; index as i "
+                  (mouseover)="highlightRow(item.id)" class="tr">
+                  <td>{{i+1}}</td>
+                  <td>{{item.name}}</td>
+                  
+                  <td>{{item.mobile}}</td>
+                  <td>{{item.address}}</td>
+                  <td> <i class="fas td-active-result" [ngClass]="{
+                            'fa-check-circle active-icon': item.isDeleted === false,
+                            'fa-times-circle non-active-icon': item.isDeleted === true
+                        }"></i></td>
+                  <td><i class="fas fa-rupee-sign"></i>&nbsp;{{item.balanceAmount}}</td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th scope="col"></th>
+                  <th scope="col"></th>
+                  <th scope="col"></th>
+                  <th scope="col">Total</th>
+                  <th scope="col"></th>
+                  <th scope="col"><i class="fas fa-rupee-sign">&nbsp;</i>{{filterMetadata.sums[0]}}</th>
+                  
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+        </div>
+      </div>
+</div>

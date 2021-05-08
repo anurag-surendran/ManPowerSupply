@@ -1,0 +1,114 @@
+<div class="applications-container">
+  <spinner *ngIf="attendances==null"></spinner>
+  <div class="top-panel">
+    <div class="date-container">
+      <mat-form-field>
+        <mat-label>Date</mat-label>
+        <input matInput (dateInput)="onDateChange($event)" [value]="date" [matDatepicker]="picker1">
+        <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+        <mat-datepicker #picker1></mat-datepicker>
+      </mat-form-field>
+    </div>
+    <div class="search-container">
+      <mat-form-field class="pop-up-field-full-width">
+        <span matPrefix><i class="fas fa-search"></i> &nbsp;</span>
+        <input cdkFocusInitial placeholder="Search" [(ngModel)]="searchText" matInput
+          [ngModelOptions]="{standalone: true}" autocomplete="off">
+        <span *ngIf="attendances!=null" matSuffix>Total Items : {{filterMetadata.count}}</span>
+      </mat-form-field>
+    </div>
+    <div class="add-container" (click)="addOrUpdateAttendance()">
+      <div class="add-icon"><i class="fas fa-plus"></i></div>
+      <div class="add-application-label">New Attendance</div>
+    </div>
+    <button *ngIf="isTrnsferData && attendances!=null && attendances.length > 0" mat-flat-button color="primary"
+      class="btn-transfer" (click)="fnTransferAttendance();" mat-button>Transfer</button>
+    <div class="print-icon" (click)="print();"><i class="fas fa-print"></i></div>
+  </div>
+  <div class="content-panel">
+    <div class="table-container">
+      <div class="table-scroll">
+        <table class="main-table">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Employee</th>
+              <th scope="col"></th>
+              <th scope="col">Customer</th>
+              <th scope="col">Attendance</th>
+              <th scope="col">Next Day Customer</th>
+              <th scope="col">Customer Pay</th>
+              <th scope="col">Customer TA</th>
+              <th scope="col">Rent</th>
+              <th scope="col">Company TA</th>
+              <th scope="col">Employee Pay</th>
+              <th scope="col">Skills</th>
+              <th scope="col">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of attendances | TableFilter:{employeeName:searchText,customerName:searchText,nextDayCustomerName:searchText,skill:searchText,skillCode:searchText}
+                  :filterMetadata
+                  :['customerPay','customerTA','rent','companyTA','employeePay']; 
+                  index as i " (mouseover)="highlightRow(item.id)" class="tr">
+              <td>{{i+1}}</td>
+              <td>
+                <span class="table-col-title-hlink" (click)="addOrUpdateAttendance(item)"
+                  [ngClass]="{'title-col-highlight' : item.id == selectedRow}"><b>{{item.employeeName}}</b></span>
+              </td>
+              <td>
+                <button *ngIf="!item.isDeleted" style="float: right;" class="btn-more" mat-icon-button
+                  [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+                  <mat-icon>more_vert</mat-icon>
+                </button>
+                <mat-menu #menu="matMenu">
+                  <button mat-menu-item (click)="addOrUpdateAttendance(item)">
+                    <i class="far fa-edit active-icon td-active-result"></i>
+                    <span>Edit</span>
+                  </button>
+                  <button mat-menu-item (click)="fnDeleteAttendance(item.id)">
+                    <i class="fas fa-times-circle non-active-icon td-active-result"></i>
+                    <span>Delete</span>
+                  </button>
+                </mat-menu>
+              </td>
+              <td><b>{{item.customerName}}</b></td>
+              <td>{{item.attendanceStatus==null?'N/A':(item.attendanceStatus? 'YES':'NO')}}</td>
+              <td>{{item.nextDayCustomerName}}</td>
+              <td><i class="fas fa-rupee-sign"></i>&nbsp;{{item.customerPay}}</td>
+              <td><i class="fas fa-rupee-sign"></i>&nbsp;{{item.rent}}</td>
+              <td><i class="fas fa-rupee-sign"></i>&nbsp;{{item.customerTA}}</td>
+              <td><i class="fas fa-rupee-sign"></i>&nbsp;{{item.companyTA}}</td>
+              <td><i class="fas fa-rupee-sign"></i>&nbsp;{{item.employeePay}}</td>
+              <td>{{item.skillCode}}</td>
+              <td>
+                <i class="fas td-active-result" [ngClass]="{
+                    'fa-check-circle active-icon': item.isDeleted === false,
+                    'fa-times-circle non-active-icon': item.isDeleted === true
+                    }">
+                </i>
+              </td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr>
+              <th scope="col"></th>
+              <th scope="col"></th>
+              <th scope="col"></th>
+              <th scope="col"></th>
+              <th scope="col"></th>
+              <th scope="col">Total</th>
+              <th scope="col"><i class="fas fa-rupee-sign"></i>&nbsp;{{filterMetadata.sums[0]}}</th>
+              <th scope="col"><i class="fas fa-rupee-sign"></i>&nbsp;{{filterMetadata.sums[1]}}</th>
+              <th scope="col"><i class="fas fa-rupee-sign"></i>&nbsp;{{filterMetadata.sums[2]}}</th>
+              <th scope="col"><i class="fas fa-rupee-sign"></i>&nbsp;{{filterMetadata.sums[3]}}</th>
+              <th scope="col"><i class="fas fa-rupee-sign"></i>&nbsp;{{filterMetadata.sums[4]}}</th>
+              <th scope="col"></th>
+              <th scope="col"></th>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

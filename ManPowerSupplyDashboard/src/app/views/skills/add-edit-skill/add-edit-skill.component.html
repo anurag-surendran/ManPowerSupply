@@ -1,0 +1,49 @@
+<div class="pop-up-container">
+    <div class="pop-up-header-container">
+      <div class="pop-up-header-left-bar"></div>
+      <div class="pop-up-header-content">{{skillData==null?'New':'View / Update'}} Skill</div>
+    </div>
+    <form class="pop-up-content-container" [formGroup]="skillForm">
+      <table class="pop-up-content-table">
+        <tr>
+          <td>
+            <mat-form-field class="pop-up-field-full-width">
+              <mat-label>Skill<span style="color: red;">*</span></mat-label>
+              <input matInput #name maxlength="50" autocomplete="off" formControlName="name" cdkFocusInitial>
+              <mat-hint align="end">{{name.value.length}} / 50</mat-hint>
+              <mat-error *ngIf="skillForm.get('name').hasError('required')">
+                Skill Name is Required!
+              </mat-error>
+            </mat-form-field>
+          </td>
+          <td>
+            <mat-form-field class="pop-up-field-full-width">
+              <mat-label>Skill Code<span style="color: red;">*</span></mat-label>
+              <input matInput #code maxlength="20"  autocomplete="off" formControlName="code">
+              <mat-hint align="end">{{code.value.length}} / 20</mat-hint>
+              <mat-error *ngIf="skillForm.get('code').hasError('required')">
+                Skill Code is Required!
+              </mat-error>
+            </mat-form-field>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2">
+            <mat-form-field class="pop-up-field-full-width">
+              <mat-label>Description</mat-label>
+              <textarea matInput rows="5" #description maxlength="500" placeholder="Description"
+                formControlName="description"></textarea>
+              <mat-hint align="end">{{description.value.length}} / 500</mat-hint>
+            </mat-form-field>
+          </td>
+        </tr>
+      </table>
+    </form>
+  
+    <div class="pop-up-footer-container">
+      <button mat-flat-button color="primary" class="float-right" mat-button
+        (click)="addOrUpdate()">{{skillData==null?'Add':'Update'}}</button>
+      <button mat-flat-button class="float-right pop-up-btn-cancel" mat-button (click)="close()">Cancel</button>
+    </div>
+  </div>
+  

@@ -1,0 +1,44 @@
+:host{
+    margin-top: 50px;
+    width: 100%;
+    height: 100%;
+    margin-right: 20px;
+}
+
+.count-card-icon{
+    width: 40px;
+    height: 40px;
+    background-color: red;
+    color: white;
+    text-align: center;
+    line-height: 40px;
+    float: left;
+    margin-left: 10px;
+    margin-top: -20px;
+    font-size: 19px;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
+.card-header{
+    float: right;
+    height: 30px;
+    line-height: 30px;
+    margin-right: 10px;
+    font-size: 12px;
+}
+
+.count{
+    width: 100%;
+    height: 50px;
+    text-align: center;
+    float: left;
+    line-height: 50px;
+    font-size: 20px;
+    font-weight: 500;
+    color: #001188;
+}
+
+.ruoees-icon{
+    font-size: 17px;
+    margin-right: 5px;
+}

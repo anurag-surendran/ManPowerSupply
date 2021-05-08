@@ -1,0 +1,38 @@
+
+* {
+    box-sizing: border-box;
+}
+body {
+    font-family: Lato;
+}
+
+.dash-row {
+    padding: 20px;
+    margin: 40px;
+}
+.welcome-message {
+    line-height: 40px;
+    text-align: left;
+    width: 100%;
+    height: 100%;
+    font-weight: 400;
+}
+
+.user-name{
+    font-weight: 500;
+}
+
+.attendance-card{
+    margin: 40px;
+    height: 480px;
+    width: calc(100% - 80px);
+    background-color: #d2d2d224;
+}
+
+.customer-card{
+    margin: 25px;
+    width: calc(100% - 50px);
+    height: 500px;
+    border: 1px solid #ddd;
+    box-shadow: rgb(0 0 0 / 20%) 3px 3px 6px;
+}

@@ -1,0 +1,108 @@
+<div class="applications-container">
+    <spinner *ngIf="employeeLedgers==null"></spinner>
+    <div class="top-panel">
+      <form class="pop-up-content-container" [formGroup]="employeeLedgerForm">
+        <div class="date-container">
+          <mat-form-field>
+            <mat-label>From Date<span style="color: red;">*</span></mat-label>
+            <input matInput (dateInput)="fnLoadAllEmployeeLedgers()" formControlName="fromDate" [matDatepicker]="picker1">
+            <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+            <mat-datepicker #picker1></mat-datepicker>
+            <mat-error *ngIf="employeeLedgerForm.get('fromDate').hasError('required')">
+              From Date is Required!
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="date-container">
+          <mat-form-field>
+            <mat-label>To Date<span style="color: red;">*</span></mat-label>
+            <input matInput (dateInput)="fnLoadAllEmployeeLedgers()" formControlName="toDate" [matDatepicker]="picker2">
+            <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+            <mat-datepicker #picker2></mat-datepicker>
+            <mat-error *ngIf="employeeLedgerForm.get('toDate').hasError('required')">
+              To Date is Required!
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="date-container">
+          <mat-form-field class="pop-up-field-full-width">
+            <mat-label>Employee<span style="color: red;">*</span></mat-label>
+            <mat-select [disableOptionCentering]="true" #ddlEmployee placeholder="Employee" formControlName="employeeId"
+              (selectionChange)="fnLoadAllEmployeeLedgers()">
+              <mat-select-filter *ngIf="ddlEmployee.focused" [displayMember]="'name'" [array]="employees"
+                (filteredReturn)="filteredEmployees =$event"></mat-select-filter>
+              <mat-option><i class="fas fa-undo-alt pop-up-ddl-reset-icon"></i>Clear</mat-option>
+              <mat-option *ngFor="let item of filteredEmployees" [value]="item.id">
+                {{item.name}}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="employeeLedgerForm.get('employeeId').hasError('required')">
+              Employee is Required!
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="search-container">
+          <mat-form-field class="pop-up-field-full-width">
+            <span matPrefix><i class="fas fa-search"></i> &nbsp;</span>
+            <input cdkFocusInitial placeholder="Search" [(ngModel)]="searchText" matInput
+              [ngModelOptions]="{standalone: true}" autocomplete="off">
+            <span *ngIf="employeeLedgers!=null" matSuffix>Total Items : {{filterMetadata.count}}</span>
+          </mat-form-field>
+        </div>
+        <div class="print-icon" (click)="print();" ><i class="fas fa-print"></i></div>
+      </form>
+    </div>
+    <div class="content-panel">
+      <div class="table-container">
+        <div class="table-scroll">
+          <form class="pop-up-content-container" [formGroup]="employeeLedgerForm">
+            <table class="main-table">
+              <thead>
+                <tr>
+                  <th scope="col">Date</th>
+                  <th scope="col">Particulars</th>
+                  <th scope="col">Employee Pay</th>
+                  <th scope="col">Payment</th>
+                  <th scope="col">Amount</th>
+                  <th scope="col">Balance</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="tr">
+                  <th></th>
+                  <th>Opening Balance</th>
+                  <th><i class="fas fa-rupee-sign"></i>&nbsp;{{employeeLedgers.openingBalance}}</th>
+                  <th></th>
+                  <th><i class="fas fa-rupee-sign"></i>&nbsp;{{employeeLedgers.openingBalance}}</th>
+                  <th></th>
+                </tr>
+                <tr *ngFor="let item of employeeLedgers.particulars | TableFilter:{type:searchText}
+                    :filterMetadata : ['employeePay','payment','amount']; 
+                    index as i;" (mouseover)="highlightRow(item.id)" class="tr">
+                  <td>{{item.date | date : 'dd-MM-yyyy'}}</td>
+                  <td>{{item.particular}}</td>
+                  <td><i class="fas fa-rupee-sign"></i>&nbsp;{{item.employeePay}}</td>
+                  <td><i class="fas fa-rupee-sign"></i>&nbsp;{{item.payment}}</td>
+                  <td><i class="fas fa-rupee-sign"></i>&nbsp;{{item.amount}}</td>
+                  <td><i class="fas fa-rupee-sign"></i>&nbsp;{{item.balance}}</td>
+  
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th scope="col"></th>
+                  <th scope="col">Total</th>
+                  <th scope="col"><i class="fas fa-rupee-sign"></i>&nbsp;{{filterMetadata.sums[0] + (employeeLedgers.openingBalance == null? 0 : employeeLedgers.openingBalance)}}</th>
+                  <th scope="col"><i class="fas fa-rupee-sign"></i>&nbsp;{{filterMetadata.sums[1]}}</th>
+                  <th scope="col"><i
+                      class="fas fa-rupee-sign"></i>&nbsp;{{filterMetadata.sums[2] + (employeeLedgers.openingBalance == null? 0 : employeeLedgers.openingBalance)}}</th>
+                  <th scope="col"></th>
+                </tr>
+              </tfoot>
+            </table>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  

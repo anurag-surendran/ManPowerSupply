@@ -1,0 +1,117 @@
+<div class="pop-up-container" cdkDrag cdkDragRootElement=".cdk-overlay-pane">
+    <div class="pop-up-header-container" cdkDragHandle>
+      <div class="pop-up-header-left-bar"></div>
+      <div class="pop-up-header-content">{{employeeData==null?'New':'View / Update'}} Employee</div>
+    </div>
+    <form class="pop-up-content-container" [formGroup]="employeeForm">
+      <table class="pop-up-content-table">
+        <tr>
+          <td>
+            <mat-form-field class="pop-up-field-full-width">
+              <mat-label>Employee<span style="color: red;">*</span></mat-label>
+              <input matInput #name maxlength="50" formControlName="name" cdkFocusInitial>
+              <mat-hint align="end">{{name.value.length}} / 50</mat-hint>
+              <mat-error *ngIf="employeeForm.get('name').hasError('required')">
+                Employee Name is Required!
+              </mat-error>
+            </mat-form-field>
+          </td>
+          <td>
+            <mat-form-field class="pop-up-field-full-width">
+              <mat-label>Mobile Number<span style="color: red;">*</span></mat-label>
+              <span matPrefix>+91 &nbsp;</span>
+              <input OnlyNumber matInput #mobile maxlength="10" formControlName="mobile">
+              <mat-hint align="end">{{mobile.value.length}} / 10</mat-hint>
+              <mat-error *ngIf="employeeForm.get('mobile').hasError('required')">
+                Mobile is Required!
+              </mat-error>
+            </mat-form-field>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <mat-form-field class="pop-up-field-full-width">
+              <mat-label>Alternate Mobile Number</mat-label>
+              <span matPrefix>+91 &nbsp;</span>
+              <input OnlyNumber matInput #mobilalte maxlength="10" formControlName="alternateMobile">
+              <mat-hint align="end">{{mobilalte.value.length}} / 10</mat-hint>
+            </mat-form-field>
+          </td>
+          <td>
+            <mat-form-field class="pop-up-field-full-width">
+              <mat-label>Location<span style="color: red;">*</span></mat-label>
+              <input matInput #location maxlength="50" formControlName="location">
+              <mat-hint align="end">{{location.value.length}} / 50</mat-hint>
+              <mat-error *ngIf="employeeForm.get('location').hasError('required')">
+                Location is Required!
+              </mat-error>
+            </mat-form-field>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <mat-form-field class="pop-up-field-full-width">
+              <mat-label>Identity Details<span style="color: red;">*</span></mat-label>
+              <input matInput #identityDetails maxlength="50" formControlName="identityDetails">
+              <mat-hint align="end">{{identityDetails.value.length}} / 50</mat-hint>
+              <mat-error *ngIf="employeeForm.get('identityDetails').hasError('required')">
+                Identity Detail is Required!
+              </mat-error>
+            </mat-form-field>
+          </td>
+          <td>
+            <mat-form-field class="pop-up-field-full-width">
+              <mat-label>Skills<span style="color: red;">*</span></mat-label>
+              <mat-select multiple [disableOptionCentering]="true" #ddlSkills placeholder="Skills"
+                formControlName="skills" [(ngModel)]="selectedSkills" [compareWith]="comparer">
+                <mat-select-filter *ngIf="ddlSkills.focused" [displayMember]="'name'" [array]="skills"
+                  (filteredReturn)="skillsFiltered =$event"></mat-select-filter>
+                <mat-option *ngFor="let item of skillsFiltered" [value]="item">
+                  {{item.name}}-{{item.code}}
+                </mat-option>
+              </mat-select>
+              <mat-hint align="end">{{selectedSkills.length}} / {{skills.length}}</mat-hint>
+              <mat-error *ngIf="employeeForm.get('skills').hasError('required')">
+                Skill is Required!
+              </mat-error>
+            </mat-form-field>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2">
+            <mat-label>Skills</mat-label>
+            <!-- <mat-chip-list class="pop-up-field-full-width" cdkDropList cdkDropListOrientation="horizontal">
+              <mat-chip color="primary" selected *ngFor="let item of selectedSkills">
+                {{item.name}}-{{item.code}}
+              </mat-chip>
+            </mat-chip-list> -->
+            <div class="pop-up-field-full-width">
+              <div class="emp-code-chip" *ngFor="let item of selectedSkills">
+                {{item.name}}-{{item.code}}
+              </div>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2">
+            <mat-form-field class="pop-up-field-full-width">
+              <mat-label>Address<span style="color: red;">*</span></mat-label>
+              <textarea matInput rows="5" #description maxlength="500" placeholder="address"
+                formControlName="address"></textarea>
+              <mat-hint align="end">{{description.value.length}} / 500</mat-hint>
+              <mat-error *ngIf="employeeForm.get('address').hasError('required')">
+                Address is Required!
+              </mat-error>
+            </mat-form-field>
+          </td>
+        </tr>
+      </table>
+    </form>
+  
+    <div class="pop-up-footer-container">
+      <button mat-flat-button color="primary" class="float-right" mat-button
+        (click)="addOrUpdate()">{{employeeData==null?'Add':'Update'}}</button>
+      <button mat-flat-button class="float-right pop-up-btn-cancel" mat-button (click)="close()">Cancel</button>
+    </div>
+  </div>
+  

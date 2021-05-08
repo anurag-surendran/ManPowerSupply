@@ -1,0 +1,108 @@
+<div class="pop-up-container" cdkDrag cdkDragRootElement=".cdk-overlay-pane">
+    <div class="pop-up-header-container" cdkDragHandle>
+        <div class="pop-up-header-left-bar"></div>
+        <div class="pop-up-header-content">New User</div>
+    </div>
+    <form autocomplete="off" class="pop-up-content-container" [formGroup]="addUserForm">
+        <table class="pop-up-content-table pop-up-padding">
+            <tr>
+                <td>
+                    <mat-form-field class="pop-up-field-full-width">
+                        <mat-label>User Name<span style="color: red;">*</span></mat-label>
+                        <input matInput autocomplete="off" formControlName="userName" cdkFocusInitial>
+                    </mat-form-field>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <mat-form-field class="pop-up-field-full-width">
+                        <mat-label>First Name<span style="color: red;">*</span></mat-label>
+                        <input matInput #firstName maxlength="50" formControlName="firstName" autocomplete="off">
+                        <mat-hint align="end">{{firstName.value.length}} / 50</mat-hint>
+                        <mat-error *ngIf="addUserForm.get('firstName').hasError('required')">
+                            First Name is Required!
+                        </mat-error>
+                    </mat-form-field>
+                </td>
+                <td>
+                    <mat-form-field class="pop-up-field-full-width">
+                        <mat-label>Last Name<span style="color: red;">*</span></mat-label>
+                        <input matInput #lastName maxlength="50" formControlName="lastName" >
+                        <mat-hint align="end">{{lastName.value.length}} / 50</mat-hint>
+                        <mat-error *ngIf="addUserForm.get('lastName').hasError('required')">
+                            Last Name is Required!
+                        </mat-error>
+                    </mat-form-field>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <mat-form-field class="pop-up-field-full-width">
+                        <mat-label>Mobile Number<span style="color: red;">*</span></mat-label>
+                        <span matPrefix>+91 &nbsp;</span>
+                        <input OnlyNumber matInput #mobile maxlength="10" formControlName="mobileNumber">
+                        <mat-hint align="end">{{mobile.value.length}} / 10</mat-hint>
+                        <mat-error *ngIf="addUserForm.get('mobileNumber').hasError('required')">
+                            Mobile is Required!
+                        </mat-error>
+                    </mat-form-field>
+                </td>
+                <td>
+                    <mat-form-field class="pop-up-field-full-width">
+                        <mat-label>E Mail<span style="color: red;">*</span></mat-label>
+                        <input matInput #email maxlength="50" formControlName="eMail">
+                        <mat-hint align="end">{{email.value.length}} / 50</mat-hint>
+                        <mat-error *ngIf="addUserForm.get('eMail').hasError('required')">
+                            E Mail is Required!
+                        </mat-error>
+                        <mat-error *ngIf="addUserForm.get('eMail').hasError('email')">
+                            E mail must be a valid format
+                        </mat-error>
+                    </mat-form-field>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <mat-form-field class="pop-up-field-full-width">
+                        <mat-label>Organizations<span style="color: red;">*</span></mat-label>
+                        <mat-select multiple [disableOptionCentering]="true" #ddlOrganizations placeholder="Organizations"
+                            formControlName="organizations" [(ngModel)]="selectedOrganizations" [compareWith]="comparer">
+                            <mat-select-filter *ngIf="ddlOrganizations.focused" [displayMember]="'name'" [array]="organizations"
+                                (filteredReturn)="organizationsFiltered =$event"></mat-select-filter>
+                            <mat-option *ngFor="let item of organizationsFiltered" [value]="item">
+                                {{item.name}}
+                            </mat-option>
+                        </mat-select>
+                        <mat-hint align="end">{{selectedOrganizations.length}} / {{organizations.length}}</mat-hint>
+                        <mat-error *ngIf="addUserForm.get('organizations').hasError('required')">
+                            Organization is Required!
+                        </mat-error>
+                    </mat-form-field>
+                </td>
+                <td>
+                    <mat-form-field class="pop-up-field-full-width">
+                        <mat-label>Roles<span style="color: red;">*</span></mat-label>
+                        <mat-select multiple [disableOptionCentering]="true" #ddlRoles placeholder="Roles"
+                            formControlName="roles" [(ngModel)]="selectedRoles" [compareWith]="comparer">
+                            <mat-select-filter *ngIf="ddlRoles.focused" [displayMember]="'name'" [array]="roles"
+                                (filteredReturn)="rolesFiltered =$event"></mat-select-filter>
+                            <mat-option *ngFor="let item of rolesFiltered" [value]="item">
+                                {{item.name}}
+                            </mat-option>
+                        </mat-select>
+                        <mat-hint align="end">{{selectedRoles.length}} / {{roles.length}}</mat-hint>
+                        <mat-error *ngIf="addUserForm.get('roles').hasError('required')">
+                            Role is Required!
+                        </mat-error>
+                    </mat-form-field>
+                </td>
+            </tr>
+        </table>
+    </form>
+
+    <div class="pop-up-footer-container">
+        <button mat-flat-button color="primary" class="float-right" mat-button
+            (click)="addUser()">Add</button>
+        <button mat-flat-button class="float-right pop-up-btn-cancel" mat-button (click)="close()">Cancel</button>
+    </div>
+</div>

@@ -1,0 +1,120 @@
+<div class="applications-container">
+    <spinner *ngIf="customerLedgers==null"></spinner>
+    <div class="top-panel">
+      <form class="pop-up-content-container" [formGroup]="customerLedgerForm">
+        <div class="date-container">
+          <mat-form-field>
+            <mat-label>From Date<span style="color: red;">*</span></mat-label>
+            <input matInput (dateInput)="fnLoadAllCustomerLedgers()" formControlName="fromDate" [matDatepicker]="picker1">
+            <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+            <mat-datepicker #picker1></mat-datepicker>
+            <mat-error *ngIf="customerLedgerForm.get('fromDate').hasError('required')">
+              From Date is Required!
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="date-container">
+          <mat-form-field>
+            <mat-label>To Date<span style="color: red;">*</span></mat-label>
+            <input matInput (dateInput)="fnLoadAllCustomerLedgers()" formControlName="toDate" [matDatepicker]="picker2">
+            <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+            <mat-datepicker #picker2></mat-datepicker>
+            <mat-error *ngIf="customerLedgerForm.get('toDate').hasError('required')">
+              To Date is Required!
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="date-container">
+          <mat-form-field class="pop-up-field-full-width">
+            <mat-label>Customer<span style="color: red;">*</span></mat-label>
+            <mat-select [disableOptionCentering]="true" #ddlCustomer placeholder="Customer" formControlName="customerId"
+              (selectionChange)="fnLoadAllCustomerLedgers()">
+              <mat-select-filter *ngIf="ddlCustomer.focused" [displayMember]="'name'" [array]="customers"
+                (filteredReturn)="filteredCustomers =$event"></mat-select-filter>
+              <mat-option><i class="fas fa-undo-alt pop-up-ddl-reset-icon"></i>Clear</mat-option>
+              <mat-option *ngFor="let item of filteredCustomers" [value]="item.id">
+                {{item.name}}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="customerLedgerForm.get('customerId').hasError('required')">
+              Customer is Required!
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="print-icon" (click)="print();" ><i class="fas fa-print"></i></div>
+        <div class="search-container">
+          <mat-form-field class="pop-up-field-full-width">
+            <span matPrefix><i class="fas fa-search"></i> &nbsp;</span>
+            <input cdkFocusInitial placeholder="Search" [(ngModel)]="searchText" matInput
+              [ngModelOptions]="{standalone: true}" autocomplete="off">
+            <span *ngIf="customerLedgers!=null" matSuffix>Total Items : {{filterMetadata.count}}</span>
+          </mat-form-field>
+        </div>
+      </form>
+    </div>
+    <div class="content-panel">
+      <div class="table-container">
+        <div class="table-scroll">
+          <form class="pop-up-content-container" [formGroup]="customerLedgerForm">
+            <table class="main-table">
+              <thead>
+                <tr>
+                  <th scope="col">Date</th>
+                  <th scope="col">Particulars</th>
+                  <th scope="col">Customer Pay</th>
+                  <th scope="col">Customer TA</th>
+                  <th scope="col">Rent</th>
+                  <th scope="col">Total Pay</th>
+                  <th scope="col">Received</th>
+                  <th scope="col">Amount</th>
+                  <th scope="col">Balance</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="tr">
+                  <th></th>
+                  <th>Opening Balance</th>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                  <th><i class="fas fa-rupee-sign"></i>&nbsp;{{customerLedgers.openingBalance}}</th>
+                  <th></th>
+                </tr>
+                <tr *ngFor="let item of customerLedgers.particulars | TableFilter:{type:searchText}
+                    :filterMetadata : ['customerPay','customerTA','rent','totalPay','received','amount']; 
+                    index as i;" (mouseover)="highlightRow(item.id)" class="tr">
+                  <td>{{item.date | date : 'dd-MM-yyyy'}}</td>
+                  <td>{{item.particular}}</td>
+                  <td><i class="fas fa-rupee-sign"></i>&nbsp;{{item.customerPay}}</td>
+                  <td><i class="fas fa-rupee-sign"></i>&nbsp;{{item.customerTA}}</td>
+                  <td><i class="fas fa-rupee-sign"></i>&nbsp;{{item.rent}}</td>
+                  <td><i class="fas fa-rupee-sign"></i>&nbsp;{{item.totalPay}}</td>
+                  <td><i class="fas fa-rupee-sign"></i>&nbsp;{{item.received}}</td>
+                  <td><i class="fas fa-rupee-sign"></i>&nbsp;{{item.amount}}</td>
+                  <td><i class="fas fa-rupee-sign"></i>&nbsp;{{item.balance}}</td>
+  
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th scope="col"></th>
+                  <th scope="col">Total</th>
+                  <th scope="col"><i class="fas fa-rupee-sign"></i>&nbsp;{{filterMetadata.sums[0]}}</th>
+                  <th scope="col"><i class="fas fa-rupee-sign"></i>&nbsp;{{filterMetadata.sums[1]}}</th>
+                  <th scope="col"><i class="fas fa-rupee-sign"></i>&nbsp;{{filterMetadata.sums[2]}}</th>
+                  <th scope="col"><i class="fas fa-rupee-sign"></i>&nbsp;{{filterMetadata.sums[3]}}</th>
+                  <th scope="col"><i class="fas fa-rupee-sign"></i>&nbsp;{{filterMetadata.sums[4]}}</th>
+                  <th scope="col"><i
+                      class="fas fa-rupee-sign"></i>&nbsp;{{filterMetadata.sums[5] + (customerLedgers.openingBalance == null? 0 : customerLedgers.openingBalance)}}</th>
+                  <th scope="col"></th>
+                </tr>
+              </tfoot>
+            </table>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  
